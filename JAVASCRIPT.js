@@ -16,8 +16,13 @@ document.addEventListener('goalLoad', function(obj) {
 	// this will fire only once when the widget loads
 	console.log(obj.detail);
 	$('#title').text(obj.detail.title);
-	$('#goal-current').text(twodigitsafterdecimal(obj.detail.amount.current,',')+obj.detail.currency);
-	$('#goal-total').text(twodigitsafterdecimal(obj.detail.amount.target,',')+obj.detail.currency);
+	if(typeof(obj.detail.currency) != "undefined") {
+		$('#goal-current').text(twodigitsafterdecimal(obj.detail.amount.current,',')+obj.detail.currency);
+		$('#goal-total').text(twodigitsafterdecimal(obj.detail.amount.target,',')+obj.detail.currency);
+	} else {
+		$('#goal-current').text(obj.detail.amount.current);
+		$('#goal-total').text(obj.detail.amount.target);
+	}
 	$('#goal-end-date').text(obj.detail.to_go.ends_at);
 	if (obj.detail.amount.current / obj.detail.amount.target < 0.05) {
 		document.querySelector("#goal-current").style.width = String(100 * obj.detail.amount.current / obj.detail.amount.target)+"%";
@@ -31,8 +36,12 @@ document.addEventListener('goalLoad', function(obj) {
 
 document.addEventListener('goalEvent', function(obj) {
 	// obj.detail will contain information about the goal
-	console.log(obj.detail);
-	$('#goal-current').text(twodigitsafterdecimal(obj.detail.amount.current,',')+obj.detail.currency);
+	console.log(obj.detail);	
+	if(typeof(obj.detail.currency) != "undefined") {
+		$('#goal-current').text(twodigitsafterdecimal(obj.detail.amount.current,',')+obj.detail.currency);
+	} else {
+		$('#goal-current').text(obj.detail.amount.current);
+	}	
 	if (obj.detail.amount.current / obj.detail.amount.target < 0.05) {
 		document.querySelector("#goal-current").style.width = String(100 * obj.detail.amount.current / obj.detail.amount.target)+"%";
 		document.querySelector("#goal-current").style.paddingLeft = "0";
