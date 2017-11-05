@@ -9,13 +9,20 @@ function twodigitsafterdecimal(this_value,decimal_char) {
 	return(String(before_decimal)+decimal_char+String(after_decimal));
 }
 
+function htmlDecode(input) {
+	//Takes a string and returns it HTML un-escaped. So &amp; becomes &
+	//I found it here: https://stackoverflow.com/questions/1912501/unescape-html-entities-in-javascript
+	var doc = new DOMParser().parseFromString(input, "text/html");
+	return doc.documentElement.textContent;
+}
+
 // Events will be sent when someone followers
 // Please use event listeners to run functions.
 document.addEventListener('goalLoad', function(obj) {
 	// obj.detail will contain information about the current goal
 	// this will fire only once when the widget loads
 	console.log(obj.detail);
-	$('#title').text(obj.detail.title);
+	$('#title').text(htmlDecode(obj.detail.title));
 	if(typeof(obj.detail.currency) != "undefined") {
 		$('#goal-current').text(twodigitsafterdecimal(obj.detail.amount.current,',')+obj.detail.currency);
 		$('#goal-total').text(twodigitsafterdecimal(obj.detail.amount.target,',')+obj.detail.currency);
